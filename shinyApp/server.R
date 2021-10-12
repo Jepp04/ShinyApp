@@ -6,65 +6,54 @@
 #
 #    http://shiny.rstudio.com/
 #
-#library(plotly)
+library(plotly)
 library(shiny)
+library(caret)
 
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-    sizeOut <- 500
-    CurrentCategory <- colnames(mtcars)[0]
+    #Global Variables
+    CurrentCategory <- colnames(iris)[1]
     data <- 0
+    Partition <- 0
+    Training <- 0
+    Testing <- 0
+    ratio <- 0.1
+    
+    trainC <- trainControl(method = "cv", number = 5, allowParallel = T)
+    
+    #Events
     observeEvent(input$Category, {
         CurrentCategory <<- input$Category
-        
-        data <<- data.frame("Cars" = rownames(mtcars), mtcars)
-        data <<- data[, c("Cars", CurrentCategory)]
-        
-        output$distPlot <- renderPlotly({
-            plot_ly(data, labels = ~data[,"Cars"], values = ~data[,CurrentCategory], type = 'pie',
-                    textposition = 'inside',
-                    textinfo = 'label+percent',
-                    insidetextfont = list(color = '#FFFFFF'),
-                    hoverinfo = 'text',
-                    width = sizeOut,
-                    height = sizeOut,
-                    showlegend = FALSE) %>%
-            layout(title = paste("Ratios between the different cars based on",CurrentCategory),
-                       xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                       yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
-        })
+        data <<- data.frame("Species"=iris[,"Species"] ,"Cat"=iris[,CurrentCategory])
     })
-    observeEvent(input$Inc, {
-        sizeOut <<- sizeOut + 10
+    
+    observeEvent(input$RatioTraining, {
+        ratio <<- input$RatioTraining/100
+        Partition <- createDataPartition(y = data$Species,p = ratio,list = FALSE)
+        Training <<- data.frame( data[Partition,])
+        Testing <<- data.frame(data[-Partition,])
+    })
+    
+    observeEvent(input$Train, {
+        
+        modFit_lda <- train(Species~.,method = "lda" ,data = Training, trControl = trainC)
+        
+        predict_lda <- predict(modFit_lda,Testing)
+        output$Results <- renderPrint({
+            confusionMatrix(predict_lda, as.factor(Testing$Species))
+        })        
+        eqPred <- (predict_lda==Testing$Species)
+        
+        plotData<- data.frame("Prediction" = predict_lda, "Actuals" = Testing$Species)
+
+        scatter <- ggplot(plotData, aes(x = Prediction, y = Actuals, color = eqPred)) + 
+            geom_point() 
+            geom_smooth(formula=y ~ x, method="lda", se=FALSE) 
+        
         output$distPlot <- renderPlotly({
-            plot_ly(data, labels = ~data[,"Cars"], values = ~data[,CurrentCategory], type = 'pie',
-                    textposition = 'inside',
-                    textinfo = 'label+percent',
-                    insidetextfont = list(color = '#FFFFFF'),
-                    hoverinfo = 'text',
-                    width = sizeOut,
-                    height = sizeOut,
-                    showlegend = FALSE) %>%
-                layout(title = paste("Ratios between the different cars based on",CurrentCategory),
-                       xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                       yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
-        })
-        })
-    observeEvent(input$Dec, {
-        sizeOut <<- sizeOut - 10
-        output$distPlot <- renderPlotly({
-            plot_ly(data, labels = ~data[,"Cars"], values = ~data[,CurrentCategory], type = 'pie',
-                    textposition = 'inside',
-                    textinfo = 'label+percent',
-                    insidetextfont = list(color = '#FFFFFF'),
-                    hoverinfo = 'text',
-                    width = sizeOut,
-                    height = sizeOut,
-                    showlegend = FALSE) %>%
-                layout(title = paste("Ratios between the different cars based on",CurrentCategory),
-                       xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                       yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+            ggplotly(p = scatter, type = 'scatter')
         })
     })
 })
