@@ -9,11 +9,15 @@
 library(plotly)
 library(shiny)
 library(caret)
+library(stats)
+library(ggplot2)
+library(e1071)
 
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
     #Global Variables
+    set.seed(123456)
     CurrentCategory <- colnames(iris)[1]
     data <- 0
     Partition <- 0
@@ -31,12 +35,13 @@ shinyServer(function(input, output) {
     
     observeEvent(input$RatioTraining, {
         ratio <<- input$RatioTraining/100
-        Partition <- createDataPartition(y = data$Species,p = ratio,list = FALSE)
-        Training <<- data.frame( data[Partition,])
-        Testing <<- data.frame(data[-Partition,])
     })
     
     observeEvent(input$Train, {
+        
+        Partition <- createDataPartition(y = data$Species,p = ratio,list = FALSE)
+        Training <<- data.frame( data[Partition,])
+        Testing <<- data.frame(data[-Partition,])
         
         modFit_lda <- train(Species~.,method = "lda" ,data = Training, trControl = trainC)
         
