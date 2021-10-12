@@ -25,7 +25,7 @@ shinyUI(fluidPage(
                             ,step = 10
                             ,value = 10
                         ),
-                        actionButton("Train", "Train")
+                        actionButton("Train", "Train - It takes a few seconds")
                     ),
                     mainPanel(
                         plotlyOutput("distPlot"),

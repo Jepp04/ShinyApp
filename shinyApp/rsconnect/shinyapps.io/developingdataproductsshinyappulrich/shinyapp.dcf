@@ -5,9 +5,9 @@ account: developingdataproductsshinyappulrich
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4842625
-bundleId: 5130098
+bundleId: 5130234
 url: https://developingdataproductsshinyappulrich.shinyapps.io/shinyapp/
-when: 1634028783.54813
-lastSyncTime: 1634028783.54813
+when: 1634031887.87463
+lastSyncTime: 1634031887.87463
 asMultiple: FALSE
 asStatic: FALSE

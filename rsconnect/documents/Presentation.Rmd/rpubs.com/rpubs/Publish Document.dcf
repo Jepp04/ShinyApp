@@ -6,6 +6,6 @@ server: rpubs.com
 hostUrl: rpubs.com
 appId: https://api.rpubs.com/api/v1/document/820961/52c770078fb44f859d9b4e8d9e4a442b
 bundleId: https://api.rpubs.com/api/v1/document/820961/52c770078fb44f859d9b4e8d9e4a442b
-url: http://rpubs.com/publish/claim/820961/3a48fc78bc6645d98ec23545d04d6491
-when: 1634029955.97702
-lastSyncTime: 1634029955.97702
+url: http://rpubs.com/Ulrich04/820961
+when: 1634033021.56533
+lastSyncTime: 1634033021.56533
