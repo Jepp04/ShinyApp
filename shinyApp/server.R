@@ -61,4 +61,10 @@ shinyServer(function(input, output) {
             ggplotly(p = scatter, type = 'scatter')
         })
     })
+    
+    getDoc<-function() {
+        return(includeHTML("README.html"))
+    }
+    
+    output$README<-renderUI({getDoc()})
 })
