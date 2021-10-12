@@ -8,7 +8,8 @@ testing data. This data was then used to train and predict on a Linear Discrimin
 
 ## Components
 ### Category Slider
-![MarineGEO circle logo](/assets/img/MarineGEO_logo.png "MarineGEO logo")
+![Category Slider](CatSlider.png "Category Slider")
+
 This slider lets you choose off which category the training and testing data will be based on.
 The list of categorys to choose from is listed below:
 
@@ -18,12 +19,15 @@ The list of categorys to choose from is listed below:
 - Petal.Width
 
 ### Ratio Slider
-![MarineGEO circle logo](/assets/img/MarineGEO_logo.png "MarineGEO logo")
+![Ratio Slider](RatioSlider.png "Ratio Slider")
+
 This slider lets you choose the ratio or percentage of the iris data used to build the training set. 
 The values ranges between 10% to 100% and steps in 10%.
 
 ### Train Button
-![MarineGEO circle logo](/assets/img/MarineGEO_logo.png "MarineGEO logo")
+![Train Button](TrainButton.png "Train Button")
+
 This button executes the training and prediction, which displays a graph TRUE and False predictions. 
 A Confusion Matrix results are also displayed benath the graph. 
-![MarineGEO circle logo](/assets/img/MarineGEO_logo.png "MarineGEO logo")
+
+![Prediction](Prediction.png "Prediction")
